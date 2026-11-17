@@ -630,6 +630,8 @@ function anim(to){
   requestAnimationFrame(step);
 }
 calc();
+/* Сразу показываем итог, без «0 ₽» до анимации */
+(()=>{const k=BODY[bk][1],s=SVC.filter(x=>x[2]&&x[1]).reduce((a,x)=>a+Math.round(x[1]*k/500)*500,0);shown=s;tot.textContent=(s?'≈ ':'')+fmt(s)+' ₽'})();
 /* Прайс строками и цены в карточках услуг — из того же списка SVC */
 document.getElementById('plist').innerHTML=SVC.map(s=>`<div class="row" data-rv><div><b>${s[0]}</b><p>${s[3]}</p></div><div class="v">${s[1]?'<small>от</small>'+fmt(s[1])+' ₽':'<small>после осмотра</small>'}</div></div>`).join('');
 document.querySelectorAll('[data-p]').forEach(el=>{const s=SVC.find(x=>x[0]===el.dataset.p);el.textContent=s&&s[1]?'от '+fmt(s[1])+' ₽':'цену назовём'});
