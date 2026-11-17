@@ -301,6 +301,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
 .tint .photo img{display:block;width:100%;height:auto}
 .tint .photo svg{position:absolute;inset:0;width:100%;height:100%}
 .tint .win{transition:fill .45s ease,fill-opacity .45s ease}
+.tint .win polygon{transition:inherit}
 .tint .tg{position:absolute;top:14px;padding:7px 12px;border-radius:999px;background:rgba(10,10,12,.72);backdrop-filter:blur(6px);color:#fff;font:600 13px var(--b)}
 .tint .tg.l{left:14px}.tint .tg.r{right:14px;color:var(--acc)}
 @media (max-width:640px){.tint .tg{top:8px;font-size:11px;padding:5px 9px}.tint .tg.l{display:none}.tint .tg.r{right:8px}}
@@ -373,15 +374,21 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
   <div class="wrap">
     <div class="head">
       <div><div class="num">01 · Примерка</div><h2>Какую тонировку <em>выбрать</em></h2></div>
-      <p class="sub">Нажмите процент — покажем его на заднем стекле. Чем меньше процент, тем темнее плёнка. Передние стёкла по закону — только атермалка.</p>
+      <p class="sub">Нажмите процент — покажем его на стёклах ГАЗели из нашего бокса. Чем меньше процент, тем темнее плёнка. Лобовое и передние боковые по закону — только атермалка.</p>
     </div>
     <div class="carbox" data-rv="zoom">
-      <div class="photo"><img src="img/tint.jpg" alt="Kia Cerato у студии Brutusi" loading="lazy" width="588" height="380">
-        <svg viewBox="0 0 588 380" preserveAspectRatio="none" aria-hidden="true">
-          <polygon id="wf" class="win" fill="#3f7fb0" fill-opacity="0" points="388,136 404,82 424,64 450,58 456,90 460,128 424,131"/>
-          <polygon id="wr" class="win" fill="#0a0b0d" fill-opacity=".9" points="455,62 470,64 486,82 494,108 466,118 461,90"/>
+      <div class="photo"><img src="img/tint2.jpg" alt="ГАЗель в боксе Brutusi" loading="lazy" width="768" height="600">
+        <!-- Стёкла ГАЗели: координаты в размере фото 768×600 -->
+        <svg viewBox="0 0 768 600" preserveAspectRatio="none" aria-hidden="true">
+          <g id="wins" class="win" fill="#0a0b0d" fill-opacity=".9" stroke-linejoin="round">
+            <polygon points="124,186 188,176 190,272 124,278"/>
+            <polygon points="194,164 294,152 292,286 190,290"/>
+            <polygon points="300,146 394,136 394,286 296,292"/>
+            <polygon points="472,136 596,132 604,280 470,296"/>
+            <polygon points="630,144 712,142 728,272 640,284"/>
+          </g>
         </svg>
-        <span class="tg l" id="lf">Передние: по ГОСТу</span><span class="tg r" id="lr">Задние: 5%</span></div>
+        <span class="tg l" id="lf">Стёкла за водителем</span><span class="tg r" id="lr">Сейчас: 5%</span></div>
     </div>
     <div class="tabs" id="ttabs"></div>
     <div class="info"><div><b id="tt">5%</b><p id="td"></p><span class="law" id="tl"></span></div><a class="btn acc" href="#calc">Рассчитать цену →</a></div>
@@ -637,13 +644,14 @@ document.getElementById('plist').innerHTML=SVC.map(s=>`<div class="row" data-rv>
 document.querySelectorAll('[data-p]').forEach(el=>{const s=SVC.find(x=>x[0]===el.dataset.p);el.textContent=s&&s[1]?'от '+fmt(s[1])+' ₽':'цену назовём'});
 
 /* ===== TINT: примерка. [подпись, затемнение 0–1, что видно, что по закону, 1 = только задние] ===== */
-(()=>{const T=[['5%',.93,'Салон не просматривается вообще','Только задняя полусфера',1],['15%',.84,'Виден силуэт, но не лицо','Только задняя полусфера',1],['20%',.77,'Видны черты лица сидящего внутри','Только задняя полусфера',1],['35%',.62,'Салон хорошо виден, классический вариант','Только задняя полусфера',1],['50%',.42,'Лёгкое затемнение, почти прозрачно','Только задняя полусфера',1],['Атермалка',.22,'Почти прозрачная плёнка, не пропускает жару. Бывает с лёгким синим или зелёным оттенком','Можно на лобовое и передние по ГОСТу',0]];
-const tabs=document.getElementById('ttabs'),wf=document.getElementById('wf'),wr=document.getElementById('wr');
+(()=>{const T=[['5%',.93,'Салон не просматривается вообще','Можно на всё, что за водителем',1],['15%',.84,'Виден силуэт, но не лицо','Можно на всё, что за водителем',1],['20%',.77,'Видны черты лица сидящего внутри','Можно на всё, что за водителем',1],['35%',.62,'Салон хорошо виден, классический вариант','Можно на всё, что за водителем',1],['50%',.42,'Лёгкое затемнение, почти прозрачно','Можно на всё, что за водителем',1],['Атермалка',.22,'Почти прозрачная плёнка, не пропускает жару. Бывает с лёгким синим или зелёным оттенком','Можно на лобовое и передние по ГОСТу',0]];
+const tabs=document.getElementById('ttabs'),wins=document.getElementById('wins');
 T.forEach((t,i)=>{const b=document.createElement('button');b.className=t[0].length>4?'wide':'';b.innerHTML=t[0]+'<small>'+(t[4]?'задние':'передние')+'</small>';b.onclick=()=>sel(i);tabs.appendChild(b)});
 const q=document.createElement('a');q.className='ask';q.target='_blank';q.rel='noopener';q.href=wa('Здравствуйте! Я с сайта. Помогите выбрать тонировку, моя машина: ');q.innerHTML='?<small>не знаю</small>';tabs.appendChild(q);
 function sel(i){const t=T[i];[...tabs.querySelectorAll('button')].forEach((b,j)=>b.classList.toggle('on',i===j));
- if(t[4]){wr.setAttribute('fill-opacity',t[1]);wf.setAttribute('fill-opacity',0);document.getElementById('lr').textContent='Задние: '+t[0];document.getElementById('lf').textContent='Передние: по ГОСТу'}
- else{wf.setAttribute('fill-opacity',t[1]);document.getElementById('lf').textContent='Передние: атермалка'}
+ /* тонированные проценты — почти чёрная плёнка, атермалка — лёгкий голубой оттенок */
+ wins.setAttribute('fill',t[4]?'#0a0b0d':'#3f7fb0');wins.setAttribute('fill-opacity',t[1]);
+ document.getElementById('lr').textContent='Сейчас: '+t[0];
  document.getElementById('tt').textContent=t[0]+(t[4]?' светопропускания':'');document.getElementById('td').textContent=t[2];const l=document.getElementById('tl');l.textContent=t[3];l.className='law '+(t[4]?'back':'ok')}
 sel(0)})();
 
