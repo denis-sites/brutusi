@@ -508,6 +508,19 @@ html.lock{overflow:hidden}
 @media (max-width:1000px){.rvm{--c:2;height:620px}}
 @media (max-width:640px){.rvm{--c:1;height:560px}}
 @media (prefers-reduced-motion:reduce){.rvm{overflow:auto}.rtrack .dup{display:none}}
+
+/* ===== Прайс вкладками (правило detailing-price-block) ===== */
+.ptabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.ptabs button{border:1px solid var(--line);background:rgba(255,255,255,.02);color:#cfd2d6;border-radius:999px;padding:10px 18px;font:600 14px var(--b);cursor:pointer;transition:.2s}
+.ptabs button.on{background:var(--acc);border-color:var(--acc);color:var(--accInk)}
+.price .row.rin{animation:pIn .55s var(--ease) both;animation-delay:var(--pd)}
+@keyframes pIn{from{opacity:0;transform:translate3d(0,12px,0)}}
+.pmore{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between;margin-top:22px}
+.pmore button{background:none;border:0;color:var(--acc);font:600 15px var(--b);cursor:pointer;padding:0}
+.pmore button[hidden]{display:none}
+.pmore .hint{color:var(--dim);font-size:14.5px}
+.pmore .hint a{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+@media (max-width:640px){.ptabs{flex-wrap:nowrap;overflow-x:auto;margin:0 calc(-1*var(--pad)) 10px;padding:0 var(--pad);scrollbar-width:none}.ptabs::-webkit-scrollbar{display:none}.ptabs button{flex-shrink:0;padding:9px 15px;font-size:13.5px}}
 </style>
 </head>
 <body>
@@ -542,11 +555,10 @@ html.lock{overflow:hidden}
 <!-- ===== РАСЧЁТ: калькулятор (цены в скрипте, блок PRICE) ===== -->
 <section class="qcs">
   <div class="wrap qcw">
-    <div class="head1"><div class="num">Расчёт за 30 секунд</div><h2>Цена для <em>вашей машины</em></h2><p class="sub">Выберите кузов и услуги, сумма посчитается сразу. Точную цену назовём до начала работ.</p></div>
+    <div class="head1"><div class="num">Расчёт за 30 секунд</div><h2>Цена для <em>вашей машины</em></h2><p class="sub">Отметьте услуги, сумма посчитается сразу. Цены из прайса студии, точную назовём до начала работ.</p></div>
       <!-- Калькулятор: кузов + услуги. Цены и коэффициенты — в скрипте, блок PRICE -->
       <div class="qc" id="calc">
         <div class="top"><b>Цена для вашей машины — за 30 секунд</b><small>примерный расчёт</small></div>
-        <div class="seg" id="body"><button data-k="0">Седан</button><button data-k="1" class="on">Кроссовер</button><button data-k="2">Внедорожник</button></div>
         <div class="chips" id="svcs"></div>
         <div class="res">
           <div><div class="tot" id="tot">0 ₽</div><small>точную цену назовём до начала работ</small></div>
@@ -594,7 +606,7 @@ html.lock{overflow:hidden}
     <div class="svc">
       <article class="s-card" data-rv><div class="im"><span class="svc-tag">Хит</span><img decoding="async" src="img/p05.jpg" alt="Kia с тонировкой задней полусферы" loading="lazy"></div><div class="bd">
         <h3>Тонировка</h3><p>Задняя полусфера, атермалка на перед и лобовое, тонировка фонарей, полоса на лобовое. Делаем за несколько часов.</p>
-        <div class="pr"><span data-p="Тонировка задней полусферы"></span><a href="#tint">Подобрать →</a></div></div></article>
+        <div class="pr"><span data-p="Тонировка стёкол"></span><a href="#tint">Подобрать →</a></div></div></article>
       <article class="s-card" data-rv style="--dl:.08s"><div class="im"><img decoding="async" src="img/p02.jpg" alt="BMW X5 после оклейки" loading="lazy"></div><div class="bd">
         <h3>Бронеплёнка</h3><p>Полиуретан на зоны риска или весь кузов: капот, бампер, пороги, зона погрузки. Защита от сколов и реагентов.</p>
         <div class="pr"><span data-p="Бронь зон риска"></span><a href="#calc">Рассчитать →</a></div></div></article>
@@ -606,7 +618,7 @@ html.lock{overflow:hidden}
         <div class="pr"><span data-p="Полировка + керамика"></span><a href="#calc">Рассчитать →</a></div></div></article>
       <article class="s-card" data-rv style="--dl:.08s"><div class="im"><img decoding="async" src="img/p07.jpg" alt="Пикап с чёрными элементами" loading="lazy"></div><div class="bd">
         <h3>Антихром и чёрный глянец</h3><p>Оклеиваем хром в чёрный, крышу — в чёрный полиуретан. Машина выглядит дороже и строже.</p>
-        <div class="pr"><span data-p="Антихром"></span><a href="#calc">Рассчитать →</a></div></div></article>
+        <div class="pr"><span data-p="Антихром плёнкой"></span><a href="#calc">Рассчитать →</a></div></div></article>
       <article class="s-card" data-rv style="--dl:.16s"><div class="im"><img decoding="async" src="img/p12.jpg" alt="Микроавтобус после тонировки" loading="lazy"></div><div class="bd">
         <h3>Салон и шумоизоляция</h3><p>Химчистка салона, шумоизоляция дверей и арок, антидождь. Для микроавтобусов и автопарков — договор и безнал.</p>
         <div class="pr"><span data-p="Химчистка салона"></span><a href="#contacts">Узнать →</a></div></div></article>
@@ -647,8 +659,10 @@ html.lock{overflow:hidden}
       <div><div class="num">04 · Цены</div><h2>Цены <em>без сюрпризов</em></h2></div>
       <p class="sub">Цену называем до начала работ. Клиенты в отзывах пишут: «цены лояльные», «по деньгам не много и не мало».</p>
     </div>
+    <div class="ptabs" id="ptabs" role="tablist"></div>
     <div class="price" id="plist"></div>
-    <p class="note">Итог зависит от размера машины и выбранной плёнки. Точную сумму назовём до начала работ.</p>
+    <div class="pmore"><button type="button" id="pmoreBtn"></button><p class="hint">Не знаете, что выбрать? <a href="#book" data-book data-msg="Здравствуйте! Я с сайта. Пришлю фото машины, подскажите, что выбрать и сколько стоит. Моя машина: " data-sub="Пришлите фото машины в чат, подскажем и назовём цену.">Пришлите фото машины</a>, подскажем.</p></div>
+    <p class="note">Цены «от» из прайса студии на Яндекс Картах. Итог зависит от машины и плёнки, точную сумму назовём до начала работ.</p>
   </div>
 </section>
 
@@ -820,45 +834,60 @@ bk.querySelector('[data-ch=tg]').addEventListener('click',()=>{if(bkMsg!==DEF&&n
 
 /* Любая кнопка с data-book открывает окно записи: WhatsApp / Telegram / звонок. Текст «Я с сайта» показывает, что клиент пришёл с сайта */
 
-/* ===== PRICE: цены «от» для седана и коэффициенты кузова =====
-   ВНИМАНИЕ (для Дениса): на Яндекс Картах прайса нет — это ОРИЕНТИРЫ, заменить на цены Brutusi.
-   null = цену называет мастер. [название, цена от, выбрано по умолчанию, пояснение для прайса] */
-const BODY=[['Седан',1],['Кроссовер',1.15],['Внедорожник',1.3]];
-const SVC=[ /* 5-й элемент false = только в прайсе, без кнопки в калькуляторе */
-  ['Тонировка задней полусферы',6000,true,'Любой процент, плёнки с гарантией'],
-  ['Атермалка на передние',9000,false,'Почти прозрачная, держит жару, по ГОСТу'],
-  ['Бронь зон риска',25000,false,'Капот, бампер, фары, зеркала, пороги'],
-  ['Полировка и бронь фар',5000,true,'Убираем мутность и закрываем полиуретаном'],
-  ['Антихром',8000,false,'Решётка, молдинги, шильдики в чёрный',false],
-  ['Полировка + керамика',30000,false,'Убираем «паутинку», закрываем керамикой'],
-  ['Химчистка салона',12000,false,'Сиденья, потолок, пол, багажник'],
-  ['Шумоизоляция',null,false,'Двери, арки, пол — цену назовём после осмотра',false],
+/* ===== PRICE: цены «от» с Яндекс Карт студии (вкладка «Товары и услуги», обновлено 11.09; снято 19.11.2026, см. прайс-яндекс.md)
+   [название, цена от, выбрано в калькуляторе, пояснение, в калькуляторе (false = только в прайсе), вкладка прайса] */
+const PTABS=['Тонировка и стёкла','Бронь','Полировка и керамика','Салон и другое'];
+const SVC=[
+  ['Тонировка стёкол',7500,true,'Защита от солнца, приватность и комфорт',true,0],
+  ['Атермалка на боковые',5000,false,'Почти прозрачная, держит жару, по ГОСТу',true,0],
+  ['Атермалка на лобовое',6000,false,'Защита от жары без затемнения',true,0],
+  ['Тонировка фар',3000,false,'Плёнка с лёгким затемнением',false,0],
+  ['Антидождь',5000,false,'Водоотталкивающее покрытие, дождь скатывается',true,0],
+  ['Ремонт скола',3000,false,'Полимер под УФ-лампой, шлифовка',false,0],
+  ['Бронь зон риска',80000,false,'Капот, бампер, фары, зеркала, пороги, зоны ручек',true,1],
+  ['Бронирование фар',3000,false,'Защита от помутнения, сколов и выгорания',false,1],
+  ['Бронь лобового стекла',25000,false,'Полиуретан от сколов и трещин',false,1],
+  ['Бронь всего кузова',240000,false,'Полная защита ЛКП. Матовая плёнка +15%',false,1],
+  ['Полировка и бронь фар',5000,true,'Полировка 2 000 ₽ + бронь 3 000 ₽',true,2],
+  ['Полировка кузова',15000,false,'Убираем царапины и «паутинку», возвращаем блеск',false,2],
+  ['Полировка + керамика',24000,false,'Полировка 15 000 ₽ + керамика 9 000 ₽',true,2],
+  ['Керамика кузова',9000,false,'Гидрофоб, защита от УФ и грязи, глубокий блеск',false,2],
+  ['Полировка лобового',8000,false,'Убираем мелкие царапины, улучшаем обзор',false,2],
+  ['Химчистка салона',15000,false,'Сиденья, потолок, ковры, пластик, запахи',true,3],
+  ['Керамика салона',10000,false,'Защита ткани и кожи от влаги и пятен',false,3],
+  ['Шумоизоляция',4500,false,'Арки с антикором от 4 500 ₽, салон от 5 000 ₽',false,3],
+  ['Антихром плёнкой',1500,false,'Хром в чёрный или в цвет кузова. Покраска от 2 500 ₽',false,3],
 ];
-let bodyK=1;
 const box=document.getElementById('svcs'),tot=document.getElementById('tot'),ask=document.getElementById('ask'),waBtn=document.getElementById('wa');
 const fmt=n=>n.toLocaleString('ru-RU').replace(/ |,/g,' ');
-SVC.filter(s=>s[4]!==false).forEach(s=>{const b=document.createElement('button');b.textContent=s[0];b.className=s[2]?'on':'';b.onclick=()=>{s[2]=!s[2];b.classList.toggle('on',s[2]);calc()};box.appendChild(b)});
-document.querySelectorAll('#body button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#body button').forEach(x=>x.classList.remove('on'));b.classList.add('on');bodyK=+b.dataset.k;calc()});
+SVC.filter(s=>s[4]).forEach(s=>{const b=document.createElement('button');b.textContent=s[0];b.className=s[2]?'on':'';b.onclick=()=>{s[2]=!s[2];b.classList.toggle('on',s[2]);calc()};box.appendChild(b)});
 let shown=0;
 function calc(){
-  const on=SVC.filter(s=>s[2]),k=BODY[bodyK][1];
-  const sum=on.filter(s=>s[1]).reduce((a,s)=>a+Math.round(s[1]*k/500)*500,0);
+  const on=SVC.filter(s=>s[2]);
+  const sum=on.filter(s=>s[1]).reduce((a,s)=>a+s[1],0);
   const q=on.filter(s=>!s[1]).map(s=>s[0].toLowerCase());
   ask.textContent=q.length?'+ '+q.join(', ')+' — цену назовёт мастер':'';
   anim(sum);
   const list=on.map(s=>s[0].toLowerCase()).join(', ')||'консультация';
-  calcMsg=`Здравствуйте! Я с сайта. ${BODY[bodyK][0]}: ${list}`+(sum?` ≈ ${fmt(sum)} ₽`:'')+`. Моя машина: `;
+  calcMsg=`Здравствуйте! Я с сайта. Хочу: ${list}`+(sum?`, от ${fmt(sum)} ₽`:'')+`. Моя машина: `;
 }
 function anim(to){
   const from=shown,t0=performance.now(),dur=matchMedia('(prefers-reduced-motion:reduce)').matches?0:450;
-  const step=t=>{const q=dur?Math.min(1,(t-t0)/dur):1,e=1-Math.pow(1-q,3);shown=Math.round(from+(to-from)*e);tot.textContent=(to?'≈ ':'')+fmt(shown)+' ₽';if(q<1)requestAnimationFrame(step)};
+  const step=t=>{const q=dur?Math.min(1,(t-t0)/dur):1,e=1-Math.pow(1-q,3);shown=Math.round(from+(to-from)*e);tot.textContent=(to?'от ':'')+fmt(shown)+' ₽';if(q<1)requestAnimationFrame(step)};
   requestAnimationFrame(step);
 }
 calc();
 /* Сразу показываем итог, без «0 ₽» до анимации */
-(()=>{const k=BODY[bodyK][1],s=SVC.filter(x=>x[2]&&x[1]).reduce((a,x)=>a+Math.round(x[1]*k/500)*500,0);shown=s;tot.textContent=(s?'≈ ':'')+fmt(s)+' ₽'})();
+(()=>{const s=SVC.filter(x=>x[2]&&x[1]).reduce((a,x)=>a+x[1],0);shown=s;tot.textContent=(s?'от ':'')+fmt(s)+' ₽'})();
 /* Прайс строками и цены в карточках услуг — из того же списка SVC */
-document.getElementById('plist').innerHTML=SVC.map(s=>`<div class="row" data-rv><div><b>${s[0]}</b><p>${s[3]}</p></div><div class="v">${s[1]?'<small>от</small>'+fmt(s[1])+' ₽':'<small>после осмотра</small>'}</div></div>`).join('');
+/* Прайс: вкладки, в каждой 4 строки, остальное по «Ещё N» */
+(()=>{const tabs=document.getElementById('ptabs'),list=document.getElementById('plist'),more=document.getElementById('pmoreBtn');let cur=0,open=false;
+ tabs.innerHTML=PTABS.map((t,i)=>`<button type="button" class="${i?'':'on'}">${t}</button>`).join('');
+ const draw=()=>{const rows=SVC.filter(x=>x[5]===cur),vis=open?rows:rows.slice(0,4);
+  list.innerHTML=vis.map((s,i)=>`<div class="row rin" style="--pd:${(i*.05).toFixed(2)}s"><div><b>${s[0]}</b><p>${s[3]}</p></div><div class="v"><small>от</small>${fmt(s[1])} ₽</div></div>`).join('');
+  const n=rows.length-4;more.hidden=n<=0;more.textContent=open?'Свернуть ↑':'Ещё '+n+' ↓'};
+ tabs.querySelectorAll('button').forEach((b,i)=>b.onclick=()=>{cur=i;open=false;tabs.querySelectorAll('button').forEach((x,j)=>x.classList.toggle('on',i===j));draw()});
+ more.onclick=()=>{open=!open;draw()};draw()})();
 document.querySelectorAll('[data-p]').forEach(el=>{const s=SVC.find(x=>x[0]===el.dataset.p);el.textContent=s&&s[1]?'от '+fmt(s[1])+' ₽':'цену назовём'});
 
 /* ===== TINT: примерка. [подпись, затемнение 0–1, что видно, что по закону, 1 = только задние] ===== */
