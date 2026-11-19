@@ -2,6 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
+<script>try{if(sessionStorage.getItem("brIntro"))document.documentElement.classList.add("nointro");sessionStorage.setItem("brIntro","1")}catch(e){}</script>
 <meta name="darkreader-lock">
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -437,9 +438,84 @@ html.lock{overflow:hidden}
   .hero .cta{flex-direction:column}.hero .cta .btn{width:100%}
   .hmeta{margin-top:20px;gap:10px 16px;font-size:13px}
 }
+
+/* ===== ФОН-ШЕЙДЕР: плазма (жёлтый/графит) + зерно. Появляется после первого экрана, на первом экране его нет.
+   WebGL в 1/3 разрешения и 30 кадров, на паузе пока выключен или вкладка скрыта ===== */
+.shd{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:0;transition:opacity 1.4s ease}
+.shd canvas{width:100%;height:100%;display:block}
+.shade-on .shd{opacity:1}
+.shd .grn{position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E") 0 0/180px 180px;opacity:.1}
+.shd.flat{background:radial-gradient(60% 50% at 15% 85%,rgba(255,194,26,.12),transparent 70%),radial-gradient(50% 40% at 85% 20%,rgba(160,160,160,.08),transparent 70%)}
+.hero{background:var(--bg)}
+.alt{background:rgba(18,16,12,.42)}
+
+/* ===== ИНТРО: капля падает и растекается в стеклянную плитку с логотипом, потом открывается сайт.
+   Вся анимация на CSS, сама прячется через 2.6 с. Один раз за сессию (класс nointro ставит скрипт в head) ===== */
+.intro{position:fixed;inset:0;z-index:500;display:grid;place-items:center;background:#060606;animation:introOut .7s ease 2.05s forwards}
+.nointro .intro{display:none}
+@keyframes introOut{to{opacity:0;visibility:hidden}}
+.intro .drop{position:absolute;left:50%;top:50%;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;
+  background:radial-gradient(circle at 34% 30%,#fff 0,rgba(255,236,170,.9) 12%,rgba(255,194,26,.55) 38%,rgba(120,80,0,.25) 70%,rgba(255,194,26,.6) 100%);
+  box-shadow:inset 0 -6px 12px rgba(0,0,0,.35),0 10px 30px -6px rgba(255,194,26,.5);
+  animation:dropFall .55s cubic-bezier(.55,0,.9,.5) both,dropSplat .45s cubic-bezier(.2,.8,.2,1) .55s forwards}
+@keyframes dropFall{from{transform:translate3d(0,-60vh,0) scale(.7,1.25)}to{transform:none}}
+@keyframes dropSplat{0%{transform:scale(1)}40%{transform:scale(1.9,.55)}100%{transform:scale(3.4);opacity:0}}
+.intro .tile{position:relative;width:min(420px,78vw);aspect-ratio:1.45;border-radius:34px;overflow:hidden;isolation:isolate;
+  background:linear-gradient(145deg,rgba(255,255,255,.22),rgba(255,255,255,.05) 42%,rgba(255,255,255,.02) 60%,rgba(255,194,26,.12));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 -1px 0 rgba(255,194,26,.35),inset 0 0 0 1px rgba(255,255,255,.12),0 30px 80px -20px rgba(255,194,26,.35);
+  transform:scale(.12);opacity:0;animation:tileIn 1.05s cubic-bezier(.2,.9,.25,1.15) .6s forwards}
+@keyframes tileIn{0%{opacity:1;transform:scale(.12);border-radius:50%}55%{transform:scale(1.07,.94)}75%{transform:scale(.97,1.03)}100%{opacity:1;transform:none;border-radius:34px}}
+.intro .lg{position:absolute;inset:0;animation:lgIn 1.1s cubic-bezier(.2,.8,.2,1) .7s both}
+.intro .lg img{position:absolute;left:50%;top:50%;width:150%;max-width:none;transform:translate(-49.5%,-52%);mix-blend-mode:screen}
+@keyframes lgIn{0%{opacity:0;transform:scale(1.35) skewX(-6deg)}60%{opacity:1}100%{opacity:1;transform:none}}
+/* цветная кромка, как преломление в стекле: две копии логотипа сходятся */
+.intro .lg.ca{mix-blend-mode:screen;opacity:0;animation:caIn 1.1s ease .7s both}
+@keyframes caIn{0%{opacity:.8;transform:translateX(-7px) scale(1.3)}100%{opacity:0;transform:none}}
+.intro .lg.ca.c{animation-name:caIn2}
+@keyframes caIn2{0%{opacity:.8;transform:translateX(7px) scale(1.3)}100%{opacity:0;transform:none}}
+.intro .lg.ca.r img{filter:sepia(1) saturate(8) hue-rotate(-35deg)}.intro .lg.ca.c img{filter:sepia(1) saturate(6) hue-rotate(160deg)}
+.intro .gl{position:absolute;inset:-20%;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.35) 50%,transparent 60%);transform:translateX(-80%);animation:glSweep 1s ease 1.15s forwards}
+@keyframes glSweep{to{transform:translateX(80%)}}
+.intro .rim{position:absolute;inset:0;border-radius:inherit;pointer-events:none;box-shadow:inset 0 0 30px rgba(255,255,255,.12),inset 0 14px 22px -14px rgba(255,255,255,.7),inset 0 -12px 22px -14px rgba(255,194,26,.6);background:radial-gradient(120% 60% at 20% 0%,rgba(255,255,255,.16),transparent 55%)}
+@media (prefers-reduced-motion:reduce){.intro{display:none}}
+
+/* ===== РАБОТЫ: сначала 3, дальше по кнопке «Показать ещё» ===== */
+.gal{columns:auto;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.gal button{margin:0}
+.gal button.hide{display:none}
+.gal button.new{animation:gIn .8s var(--ease) both;animation-delay:var(--gd,0s)}
+@keyframes gIn{from{opacity:0;transform:translate3d(0,26px,0) scale(.97)}}
+.galw{position:relative}
+.galw.more .gal{-webkit-mask-image:linear-gradient(180deg,#000 55%,rgba(0,0,0,.15) 100%);mask-image:linear-gradient(180deg,#000 55%,rgba(0,0,0,.15) 100%)}
+.gmore{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;align-items:center;margin-top:-34px;position:relative;z-index:2}
+.gmore .cnt{color:var(--dim);font:500 14px var(--b);width:100%;text-align:center;margin-top:4px}
+.galw:not(.more)+.gmore{margin-top:26px}
+@media (max-width:640px){
+  .gal{grid-template-columns:1fr 1fr;gap:10px}
+  .gal button:nth-child(3n+1){grid-column:span 2}
+  .gal button:nth-child(3n+1) img{aspect-ratio:4/3}
+}
+
+/* ===== ОТЗЫВЫ: колонки едут вверх/вниз, на наведении пауза, края тают ===== */
+.rvm{--c:3;position:relative;display:grid;grid-template-columns:repeat(var(--c),minmax(0,1fr));gap:16px;height:660px;overflow:hidden}
+.rvm{-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 110px,#000 calc(100% - 110px),transparent 100%);mask-image:linear-gradient(180deg,transparent 0,#000 110px,#000 calc(100% - 110px),transparent 100%)}
+.rtrack{display:flex;flex-direction:column;gap:16px;animation:rUp var(--dur,60s) linear infinite;will-change:transform}
+.rcol:nth-child(2) .rtrack{animation-direction:reverse}
+@keyframes rUp{to{transform:translate3d(0,calc(-50% - 8px),0)}}
+.rvm:hover .rtrack,.off .rtrack{animation-play-state:paused}
+.rvm .rv{flex-shrink:0}
+.rv .d{color:var(--dim);font-size:12.5px}
+@media (max-width:1000px){.rvm{--c:2;height:620px}}
+@media (max-width:640px){.rvm{--c:1;height:560px}}
+@media (prefers-reduced-motion:reduce){.rvm{overflow:auto}.rtrack .dup{display:none}}
 </style>
 </head>
 <body>
+<div class="shd" id="shd" aria-hidden="true"><canvas></canvas><span class="grn"></span></div>
+<div class="intro" id="intro" aria-hidden="true">
+  <span class="drop"></span>
+  <div class="tile"><div class="lg ca r"><img src="img/logo.jpg" alt=""></div><div class="lg ca c"><img src="img/logo.jpg" alt=""></div><div class="lg"><img src="img/logo.jpg" alt=""></div><span class="gl"></span><span class="rim"></span></div>
+</div>
 <header>
   <div class="wrap">
     <a href="#top" class="logo"><img class="lg-img" src="img/logo.jpg" alt="" width="40" height="40"><span>Brutusi <b>Detailing</b></span></a>
@@ -545,7 +621,7 @@ html.lock{overflow:hidden}
       <div><div class="num">03 · Работы</div><h2>Машины <em>из нашего бокса</em></h2></div>
       <p class="sub">Реальные фото студии с Яндекс Карт. Нажмите, чтобы рассмотреть.</p>
     </div>
-    <div class="gal" id="gal">
+    <div class="galw" id="galw"><div class="gal" id="gal">
       <button data-rv><img decoding="async" src="img/p01.jpg" alt="Lamborghini Urus" loading="lazy"></button>
       <button data-rv><img decoding="async" src="img/p02.jpg" alt="BMW X5" loading="lazy"></button>
       <button data-rv><img decoding="async" src="img/p03.jpg" alt="BMW 6 GT" loading="lazy"></button>
@@ -558,7 +634,8 @@ html.lock{overflow:hidden}
       <button data-rv><img decoding="async" src="img/p10.jpg" alt="ГАЗель в боксе" loading="lazy"></button>
       <button data-rv><img decoding="async" src="img/p12.jpg" alt="Микроавтобус" loading="lazy"></button>
       <button data-rv><img decoding="async" src="img/p13.jpg" alt="BMW 3" loading="lazy"></button>
-    </div>
+    </div></div>
+    <div class="gmore"><button class="btn acc" id="galMore" type="button">Показать ещё</button><a class="btn gh" href="https://yandex.ru/maps/org/deteyling_brutusi/107285788898/gallery/" target="_blank" rel="noopener">Все фото на Картах →</a><span class="cnt" id="galCnt"></span></div>
   </div>
 </section>
 <div class="lbx" id="lbx"><img alt=""><button class="x" aria-label="Закрыть">×</button><button class="p" aria-label="Назад">‹</button><button class="n" aria-label="Вперёд">›</button></div>
@@ -618,12 +695,7 @@ html.lock{overflow:hidden}
       <div><div class="num">07 · Отзывы</div><h2>5,0 из 5 <em>на Яндекс Картах</em></h2></div>
       <p class="sub">62 отзыва. Чаще всего хвалят скорость, аккуратность и клиентскую зону.</p>
     </div>
-    <div class="rev">
-      <div class="rv" data-rv><div class="s">★★★★★</div><p>Делал у ребят целый комплекс работ (броня, атермалка, плёнка на экраны, омыватели камер, сетку в радиатор). Ребята подходят к работе ответственно и профессионально. Цены приятные. Отдельное спасибо Максиму за консультации.</p><div class="a"><i>Т</i><div>Тигран<small>Броня и атермалка</small></div></div></div>
-      <div class="rv" data-rv style="--dl:.08s"><div class="s">★★★★★</div><p>Приезжал на антихром, тонировку и оклейку кузова бронеплёнкой. Сделали всё быстро и качественно. Полгода назад делал оклейку в именитом детейлинге — качество работы ниже. Здесь — ни единого нарекания.</p><div class="a"><i>Р</i><div>Роман Серов<small>Антихром, тонировка, броня</small></div></div></div>
-      <div class="rv" data-rv style="--dl:.16s"><div class="s">★★★★★</div><p>Договорились на тонировку задней полусферы. По ходу работ предложили забронировать уязвимые места — предложение приятно удивило. Работали аккуратно, быстро, с пояснениями.</p><div class="a"><i>A</i><div>Alexandr D.<small>Тонировка и бронь</small></div></div></div>
-      <div class="rv" data-rv style="--dl:.16s"><div class="s">★★★★★</div><p>Делала полировку фар с последующей оклейкой в плёнку. Результатом осталась довольна, фары стали как новые! Чётко и быстро.</p><div class="a"><i>К</i><div>Катя Д.<small>Фары</small></div></div></div>
-    </div>
+    <div class="rvm" id="rvm"></div>
     <div class="rev-more"><a class="btn gh" href="https://yandex.ru/maps/org/deteyling_brutusi/107285788898/reviews/" target="_blank" rel="noopener">Все отзывы на Яндекс Картах →</a></div>
   </div>
 </section>
@@ -836,13 +908,66 @@ function sel(i){const t=T[i];[...tabs.querySelectorAll('button')].forEach((b,j)=
  document.getElementById('tt').textContent=t[0]+(t[4]?' светопропускания':'');document.getElementById('td').textContent=t[2];const l=document.getElementById('tl');l.textContent=t[3];l.className='law '+(t[4]?'back':'ok')}
 sel(0)})();
 
+
+/* ===== РАБОТЫ: показываем по 3 ===== */
+(()=>{const items=[...document.querySelectorAll('#gal button')],btn=document.getElementById('galMore'),cnt=document.getElementById('galCnt'),w=document.getElementById('galw');let shown=3;
+ items.forEach((b,i)=>{if(i>=3){b.classList.add('hide');b.removeAttribute('data-rv')}});
+ const upd=()=>{const left=items.length-shown;w.classList.toggle('more',left>0);btn.hidden=left<=0;btn.textContent='Показать ещё '+Math.min(3,left);cnt.textContent=Math.min(shown,items.length)+' из '+items.length+' фото'};
+ btn.onclick=()=>{items.slice(shown,shown+3).forEach((b,i)=>{b.classList.remove('hide');b.classList.add('new');b.style.setProperty('--gd',(i*.08)+'s')});shown+=3;upd()};
+ upd()})();
+
+/* ===== ОТЗЫВЫ: реальные с Яндекс Карт (5★). Раскладываем по колонкам, каждая колонка дублируется для бесконечной ленты ===== */
+const REVIEWS=[["Alexandr D.", "Тонировка и бронь", "Договорились на тонировку автомобиля (задняя полусфера), приехал в оговоренное время, авто сразу в работу, парни предложили провести время в комнате ожидания, где есть всё необходимое: кофе, вода, туалет. По ходу работ предложили забронировать уязвимые места автомобиля, предложение приятно удивило. Работали аккуратно, быстро, с пояснениями."], ["Роман Серов", "Антихром, тонировка, броня", "Однозначно рекомендую! Приезжал на антихром, тонировку и оклейку кузова бронеплёнкой. Сделали всё быстро и качественно. Полгода назад делал оклейку в именитом детейлинге, качество работы ниже. Здесь же ни единого нарекания."], ["Дина Е.", "Атермалка и бронь", "Ребята молодые, работают профессионально и шустро. Заранее записались, утром машину поставил, вечером забрал. Всё понравилось, всем рекомендую. Сделали атермалку на перед и бронь на зоны риска."], ["Тигран", "Броня и атермалка", "Делал у ребят целый комплекс работ (броня, атермалка, плёнка на экраны, омыватели камер, сетку в радиатор). Всё очень понравилось, ребята подходят к работе ответственно и профессионально. Результатом остался очень доволен. Цены приятные. Работают с юр. лицами."], ["Андрей Б.", "Полировка и бронь фар", "Обращался к ребятам по вопросу полировки фар и дальнейшей оклейки в прозрачный полиуретан. Сделали быстро, чётко, по записи, по деньгам не много и не мало, работа выполнена качественно, доволен, могу рекомендовать."], ["Александр Лепаев", "Тонировка", "Делал у ребят тонировку задней полусферы, по приезду сделали ещё передние окна и полосу на лобовом стекле. Ребята молодцы, сделали всё быстро и качественно, работой доволен, рекомендую."], ["Катя Дзюба", "Фары", "Делала полировку фар с последующей оклейкой в плёнку. Результатом осталась довольна, фары стали как новые! Чётко и быстро. Обязательно вернусь в будущем."], ["Алексашка", "Полировка и керамика", "Делал полировку автомобиля, покрытие керамикой, оклейку капота, полоску на крыше и зону ручек. Сделано всё качественно, быстро и аккуратно."], ["Andrew Pulyaev", "Бронь зон риска", "Делал в этом центре оклейку бронеплёнкой зон риска. Ребята молодцы, знают, что делают, очень клиентоориентированы, всё объяснят, делают на совесть. Знакомым однозначно буду рекомендовать!"], ["Ольга А.", "Тонировка, полировка, химчистка", "Работают профессионалы своего дела. Не первый раз уже обращаюсь к ним. Делала тонировку, полировку, химчистку. Всегда всё на высшем уровне!"], ["Никита Александрович", "Тонировка", "Делал тонировку передних боковых стёкол, ребята хорошие, знают своё дело, провели в клиентскую зону и быстро выполнили свою работу. Сделали всё качественно, результатом доволен, обязательно ещё заеду на тонировку лобового в атермальную плёнку."], ["Сергей", "Крыша и фары в полиуретан", "Оклейка крыши в чёрный полиуретан, оклейка фар в полиуретан, качество работы и плёнки на высоте! Работают быстро, уверенно, аккуратно! Видно, стаж в работе большой. Очень доволен!"], ["Сергей Т.", "Бронь фар и крыши", "Делал бронирование фар, части крыши и зоны погрузки багажника, в подарок ребята оклеили зону под ручками. Цены адекватные, рекомендую."], ["Артём", "Тонировка", "Обращался в данный детейлинг-центр для оклейки автомобиля в тонировочную плёнку. Работа выполнена максимально качественно, без каких-либо нареканий, буду обращаться ещё и рекомендовать друзьям!"], ["Регина Корнишина", "Антидождь", "Делали антидождь на лобовое и боковые передние стёкла, всё супер, проверено. Быстро, качественно, приятная цена!"], ["Григорий", "Бронь всего кузова", "Обтягивал всю машину в бронеплёнку, ребята всё сделали по красоте, быстро и недорого. Настоятельно рекомендую детейлинг."], ["Егор Кукушкин", "Шумоизоляция", "Отличные ребята, очень быстро сделали шумоизоляцию, материалы качественные, цены весьма адекватные. Советую, отличное соотношение цена-качество."], ["Марьяша Назарова", "Тонировка", "Делала тонировку передних боков и задние ходовые. Всё очень понравилось, быстро, качественно! Адекватные цены и хороший материал. Теперь для тонировки и других ништячков буду приезжать к вам. Спасибо!"], ["Александр Саламахин", "Химчистка", "Делал у ребят химчистку салона, работы выполнили в срок, к качеству никаких претензий. Рекомендую."], ["Олег Караев", "Тонировка", "Тонировка стекла крышки багажника. Красиво, качественно, точно по записи. Опытные и отзывчивые специалисты! Спасибо!"], ["Алексей Георгиевич", "Тонировка микроавтобуса", "Приехал по отзывам и был очень впечатлён: молодой и слаженный коллектив, чистота и порядок, прекрасная клиентская зона, где можно выпить чашечку кофе, горячий шоколад, мягкие диваны. Микроавтобус затонировали, цены лояльные, приемлемые."]];
+(()=>{const box=document.getElementById('rvm');let cur=0;
+ const card=(r,dup)=>`<div class="rv${dup?' dup':''}"${dup?' aria-hidden="true"':''}><div class="s">★★★★★</div><p>${r[2]}</p><div class="a"><i>${r[0][0]}</i><div>${r[0]}<small>${r[1]}</small></div></div></div>`;
+ const build=()=>{const c=innerWidth>1000?3:innerWidth>640?2:1;if(c===cur)return;cur=c;const cols=Array.from({length:c},()=>[]);REVIEWS.forEach((r,i)=>cols[i%c].push(r));
+  box.innerHTML=cols.map(col=>`<div class="rcol"><div class="rtrack" style="--dur:${col.length*7}s">${col.map(r=>card(r)).join('')}${col.map(r=>card(r,1)).join('')}</div></div>`).join('')};
+ build();let t;addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(build,200)})})();
+
+/* ===== ФОН-ШЕЙДЕР: плазма на WebGL, только после первого экрана ===== */
+(()=>{const wrap=document.getElementById('shd'),cv=wrap.querySelector('canvas'),hero=document.querySelector('.hero');
+ const red=matchMedia('(prefers-reduced-motion:reduce)').matches;
+ const gl=!red&&cv.getContext('webgl',{antialias:false,alpha:false,depth:false,powerPreference:'low-power'});
+ if(!gl){cv.remove();wrap.classList.add('flat')}
+ let on=false,raf=0,last=0,t0=performance.now(),uR,uT;
+ if(gl){const sh=(t,src)=>{const o=gl.createShader(t);gl.shaderSource(o,src);gl.compileShader(o);return o};
+  const pr=gl.createProgram();
+  gl.attachShader(pr,sh(gl.VERTEX_SHADER,'attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}'));
+  gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,`precision mediump float;uniform vec2 r;uniform float t;
+void main(){vec2 uv=gl_FragCoord.xy/r;vec2 p=(gl_FragCoord.xy-.5*r)/min(r.x,r.y)*2.4;
+float v=sin(p.x*1.15+t*.7)+sin(p.y*1.45-t*.55)+sin((p.x+p.y)*.85+t*.42)+sin(length(p+vec2(sin(t*.23)*1.6,cos(t*.31)*1.3))*2.1-t*.6);
+v*=.25;
+float g=smoothstep(-.35,.55,v);
+float d=abs(v-.18-.1*sin(t*.2));float band=1.-smoothstep(.02,.09,d);float halo=1.-smoothstep(.0,.3,d);
+vec3 col=mix(vec3(.01,.009,.008),vec3(.105,.1,.095),g);
+col+=vec3(1.,.72,.08)*(.1*halo);col=mix(col,vec3(1.,.74,.08)*.5,band*.85);
+col*=1.05-.6*length(uv-vec2(.5,.45));
+gl_FragColor=vec4(col,1.);}`));
+  gl.linkProgram(pr);gl.useProgram(pr);
+  const b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+  const a=gl.getAttribLocation(pr,'p');gl.enableVertexAttribArray(a);gl.vertexAttribPointer(a,2,gl.FLOAT,false,0,0);
+  uR=gl.getUniformLocation(pr,'r');uT=gl.getUniformLocation(pr,'t')}
+ const size=()=>{if(!gl)return;const w=Math.max(160,Math.ceil(innerWidth/3)),h=Math.max(160,Math.ceil(innerHeight/3));if(cv.width!==w||cv.height!==h){cv.width=w;cv.height=h;gl.viewport(0,0,w,h);gl.uniform2f(uR,w,h)}};
+ const frame=now=>{if(!on)return;raf=requestAnimationFrame(frame);if(now-last<33)return;last=now;gl.uniform1f(uT,(now-t0)/1000*.45);gl.drawArrays(gl.TRIANGLES,0,3)};
+ const start=()=>{if(!gl||on||document.hidden)return;on=true;size();raf=requestAnimationFrame(frame)};
+ const stop=()=>{on=false;cancelAnimationFrame(raf)};
+ let vis=false,offT;
+ new IntersectionObserver(([e])=>{const show=!e.isIntersecting;if(show===vis)return;vis=show;document.documentElement.classList.toggle('shade-on',show);clearTimeout(offT);if(show)start();else offT=setTimeout(stop,1500)},{threshold:0,rootMargin:'-35% 0px 0px 0px'}).observe(hero);
+ document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();else if(vis)start()});
+ let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(size,200)})})();
+
+/* интро: убрать из DOM после анимации, клик пропускает */
+(()=>{const it=document.getElementById('intro');if(!it)return;const kill=()=>it.remove();
+ if(document.documentElement.classList.contains('nointro'))return kill();
+ it.addEventListener('click',()=>{it.style.animation='introOut .35s ease forwards'});it.addEventListener('animationend',e=>{if(e.target===it)kill()});setTimeout(kill,3200)})();
+
 /* Появление при скролле */
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{rootMargin:'0px 0px -8% 0px'});
 document.querySelectorAll('[data-rv]').forEach(el=>io.observe(el));
 
 /* Пауза бесконечных анимаций, когда блок не виден */
 const po=new IntersectionObserver(es=>es.forEach(e=>e.target.classList.toggle('off',!e.isIntersecting)));
-document.querySelectorAll('.mq,#map,.final').forEach(el=>po.observe(el));
+document.querySelectorAll('.mq,#map,.final,#reviews').forEach(el=>po.observe(el));
 
 /* Лайтбокс галереи (+ миниатюры в первом экране) */
 const gal=[...document.querySelectorAll('#gal img')],lbx=document.getElementById('lbx'),lbi=lbx.querySelector('img');let gi=0;
