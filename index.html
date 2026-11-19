@@ -483,6 +483,7 @@ html.lock{overflow:hidden}
 .gal{columns:auto;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
 .gal button{margin:0}
 .gal button.hide{display:none}
+.btn[hidden]{display:none}
 .gal button.new{animation:gIn .8s var(--ease) both;animation-delay:var(--gd,0s)}
 @keyframes gIn{from{opacity:0;transform:translate3d(0,26px,0) scale(.97)}}
 .galw{position:relative}
@@ -521,6 +522,56 @@ html.lock{overflow:hidden}
 .pmore .hint{color:var(--dim);font-size:14.5px}
 .pmore .hint a{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
 @media (max-width:640px){.ptabs{flex-wrap:nowrap;overflow-x:auto;margin:0 calc(-1*var(--pad)) 10px;padding:0 var(--pad);scrollbar-width:none}.ptabs::-webkit-scrollbar{display:none}.ptabs button{flex-shrink:0;padding:9px 15px;font-size:13.5px}}
+
+/* ===== Цены карточками (как job-listing): клик раскрывает окно ===== */
+.plist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:6px}
+.pcard{display:flex;align-items:center;gap:16px;text-align:left;width:100%;padding:18px 20px;border:1px solid var(--line);border-radius:20px;background:rgba(23,21,15,.82);color:var(--ink);cursor:pointer;font-family:inherit;transition:border-color .25s,background .25s,transform .25s}
+.pcard:hover{border-color:rgba(255,194,26,.55);background:rgba(30,27,18,.9);transform:translateY(-2px)}
+.pcard i{flex:0 0 48px;height:48px;border-radius:14px;display:grid;place-items:center;background:var(--accSoft);color:var(--acc);font-style:normal}
+.pcard i svg,.pd-ic svg{width:24px;height:24px}
+.pcard span{flex:1;min-width:0;display:grid;grid-template-columns:1fr auto;gap:2px 14px;align-items:baseline}
+.pcard b{font:700 17px var(--b)}
+.pcard em{font:800 19px var(--d);font-style:normal;white-space:nowrap;color:var(--ink)}
+.pcard small{grid-column:1/-1;color:var(--dim);font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pcard u{flex:0 0 30px;height:30px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;text-decoration:none;color:var(--dim);font-size:18px;transition:.25s}
+.pcard:hover u{border-color:var(--acc);color:var(--acc);transform:rotate(90deg)}
+.pcard.ghost{opacity:0}
+.pcard.rin{animation:pIn .55s var(--ease) both;animation-delay:var(--pd)}
+.pdlg{position:fixed;inset:0;z-index:280;display:grid;place-items:center;padding:20px;background:rgba(0,0,0,0);transition:background .4s ease}
+.pdlg[hidden]{display:none}
+.pdlg.on{background:rgba(0,0,0,.72)}
+.pd-card{position:relative;width:min(560px,100%);border-radius:28px;padding:30px 28px 26px;background:linear-gradient(180deg,#1d1a12,#121110);border:1px solid rgba(255,194,26,.28);box-shadow:0 40px 120px -30px #000;transform-origin:0 0;transition:transform .42s var(--ease)}
+.pd-card>*{opacity:0;transition:opacity .25s ease}
+.pdlg.on .pd-card>*{opacity:1;transition:opacity .35s ease .18s}
+.pd-x{position:absolute;top:16px;right:16px;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.04);color:#cfcfcb;font-size:22px;line-height:1;cursor:pointer}
+.pd-top{display:flex;align-items:center;gap:16px;padding-right:44px}
+.pd-ic{flex:0 0 56px;height:56px;border-radius:16px;display:grid;place-items:center;background:var(--accSoft);color:var(--acc);font-style:normal}
+.pd-g{display:block;font:600 12px var(--b);letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+.pd-t{font:800 24px/1.2 var(--d);text-transform:uppercase;margin-top:4px}
+.pd-p{font:900 40px/1 var(--d);margin:22px 0 14px;letter-spacing:-.02em}
+.pd-p small{font:500 15px var(--b);color:var(--dim);letter-spacing:0}
+.pd-d{color:#dcdcd8;font-size:16px}
+.pd-n{color:var(--dim);font-size:13.5px;margin-top:12px}
+.pd-btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+@media (max-width:760px){.plist{grid-template-columns:1fr}}
+@media (max-width:640px){
+  .pcard{padding:14px 14px;gap:12px}.pcard i{flex-basis:42px;height:42px}.pcard u{display:none}
+  .pcard b{font-size:15.5px}.pcard em{font-size:16px}.pcard small{white-space:normal;font-size:13px}
+  .pdlg{place-items:end center;padding:0}.pd-card{border-radius:26px 26px 0 0;padding:26px 20px max(22px,env(safe-area-inset-bottom))}
+  .pd-p{font-size:34px}.pd-btns .btn{flex:1}
+}
+@media (prefers-reduced-motion:reduce){.pd-card>*{opacity:1}}
+
+/* ===== Фото в карточках услуг увеличиваются по клику (как zoomable-image) ===== */
+.s-card .im{cursor:zoom-in}
+.s-card .im:after{content:"";position:absolute;right:12px;bottom:12px;width:36px;height:36px;border-radius:50%;background:rgba(10,10,12,.72) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7'/%3E%3C/svg%3E") center/16px no-repeat;opacity:0;transform:scale(.8);transition:.25s}
+.s-card:hover .im:after{opacity:1;transform:none}
+@media (hover:none){.s-card .im:after{opacity:.9;transform:none}}
+.zm-bg{position:fixed;inset:0;z-index:290;background:rgba(6,6,6,0);transition:background .4s ease;cursor:zoom-out}
+.zm-bg.on{background:rgba(6,6,6,.9)}
+.zm-im{position:fixed;z-index:291;background:#111 center/cover no-repeat;border-radius:24px;cursor:zoom-out;transition:left .45s var(--ease),top .45s var(--ease),width .45s var(--ease),height .45s var(--ease),border-radius .45s var(--ease)}
+.zm-cap{position:fixed;left:0;right:0;bottom:22px;z-index:292;text-align:center;color:#dcdcd8;font:600 14px var(--b);opacity:0;transition:opacity .3s ease .2s;pointer-events:none}
+.zm-cap.on{opacity:1}
 </style>
 </head>
 <body>
@@ -660,7 +711,7 @@ html.lock{overflow:hidden}
       <p class="sub">Цену называем до начала работ. Клиенты в отзывах пишут: «цены лояльные», «по деньгам не много и не мало».</p>
     </div>
     <div class="ptabs" id="ptabs" role="tablist"></div>
-    <div class="price" id="plist"></div>
+    <div class="plist" id="plist"></div>
     <div class="pmore"><button type="button" id="pmoreBtn"></button><p class="hint">Не знаете, что выбрать? <a href="#book" data-book data-msg="Здравствуйте! Я с сайта. Пришлю фото машины, подскажите, что выбрать и сколько стоит. Моя машина: " data-sub="Пришлите фото машины в чат, подскажем и назовём цену.">Пришлите фото машины</a>, подскажем.</p></div>
     <p class="note">Цены «от» из прайса студии на Яндекс Картах. Итог зависит от машины и плёнки, точную сумму назовём до начала работ.</p>
   </div>
@@ -788,6 +839,16 @@ html.lock{overflow:hidden}
   <a class="btn gh" href="tel:+79273033223" aria-label="Позвонить"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z"/></svg></a>
 </div>
 
+<div class="pdlg" id="pdlg" hidden>
+  <div class="pd-card" role="dialog" aria-modal="true" aria-labelledby="pdT">
+    <button class="pd-x" type="button" data-pclose aria-label="Закрыть">×</button>
+    <div class="pd-top"><i class="pd-ic"></i><div><small class="pd-g"></small><h3 class="pd-t" id="pdT"></h3></div></div>
+    <div class="pd-p"></div>
+    <p class="pd-d"></p>
+    <p class="pd-n">Цена «от» из прайса студии. Точную назовём до начала работ, если по фото или на осмотре всплывёт что-то важное, сначала скажем.</p>
+    <div class="pd-btns"><a class="btn acc pd-book" href="#book" data-book data-sub="Название услуги уже в сообщении, останется отправить.">Записаться</a><button class="btn gh" type="button" data-pclose>Назад к ценам</button></div>
+  </div>
+</div>
 <div class="bk" id="bk" aria-hidden="true">
   <div class="bk-bg" data-close></div>
   <div class="bk-card" role="dialog" aria-modal="true" aria-labelledby="bkT">
@@ -838,25 +899,25 @@ bk.querySelector('[data-ch=tg]').addEventListener('click',()=>{if(bkMsg!==DEF&&n
    [название, цена от, выбрано в калькуляторе, пояснение, в калькуляторе (false = только в прайсе), вкладка прайса] */
 const PTABS=['Тонировка и стёкла','Бронь','Полировка и керамика','Салон и другое'];
 const SVC=[
-  ['Тонировка стёкол',7500,true,'Защита от солнца, приватность и комфорт',true,0],
-  ['Атермалка на боковые',5000,false,'Почти прозрачная, держит жару, по ГОСТу',true,0],
-  ['Атермалка на лобовое',6000,false,'Защита от жары без затемнения',true,0],
-  ['Тонировка фар',3000,false,'Плёнка с лёгким затемнением',false,0],
-  ['Антидождь',5000,false,'Водоотталкивающее покрытие, дождь скатывается',true,0],
-  ['Ремонт скола',3000,false,'Полимер под УФ-лампой, шлифовка',false,0],
-  ['Бронь зон риска',80000,false,'Капот, бампер, фары, зеркала, пороги, зоны ручек',true,1],
-  ['Бронирование фар',3000,false,'Защита от помутнения, сколов и выгорания',false,1],
-  ['Бронь лобового стекла',25000,false,'Полиуретан от сколов и трещин',false,1],
-  ['Бронь всего кузова',240000,false,'Полная защита ЛКП. Матовая плёнка +15%',false,1],
-  ['Полировка и бронь фар',5000,true,'Полировка 2 000 ₽ + бронь 3 000 ₽',true,2],
-  ['Полировка кузова',15000,false,'Убираем царапины и «паутинку», возвращаем блеск',false,2],
-  ['Полировка + керамика',24000,false,'Полировка 15 000 ₽ + керамика 9 000 ₽',true,2],
-  ['Керамика кузова',9000,false,'Гидрофоб, защита от УФ и грязи, глубокий блеск',false,2],
-  ['Полировка лобового',8000,false,'Убираем мелкие царапины, улучшаем обзор',false,2],
-  ['Химчистка салона',15000,false,'Сиденья, потолок, ковры, пластик, запахи',true,3],
-  ['Керамика салона',10000,false,'Защита ткани и кожи от влаги и пятен',false,3],
-  ['Шумоизоляция',4500,false,'Арки с антикором от 4 500 ₽, салон от 5 000 ₽',false,3],
-  ['Антихром плёнкой',1500,false,'Хром в чёрный или в цвет кузова. Покраска от 2 500 ₽',false,3],
+  ['Тонировка стёкол',7500,true,'Защита от солнца, приватность и комфорт',true,0,'Защита от солнца, приватность и комфорт в салоне. Процент подберём под задачу, заднюю полусферу можно любой.'],
+  ['Атермалка на боковые',5000,false,'Почти прозрачная, держит жару, по ГОСТу',true,0,'Почти прозрачная плёнка, которая держит жару и ультрафиолет. Подходит на передние боковые по ГОСТу.'],
+  ['Атермалка на лобовое',6000,false,'Защита от жары без затемнения',true,0,'Защита от жары без затемнения. Лобовое остаётся прозрачным и проходит по ГОСТу.'],
+  ['Тонировка фар',3000,false,'Плёнка с лёгким затемнением',false,0,'Защитная плёнка с лёгким затемнением и стильным эффектом.'],
+  ['Антидождь',5000,false,'Водоотталкивающее покрытие, дождь скатывается',true,0,'Водоотталкивающее покрытие для стёкол. Дождь скатывается, видимость лучше.'],
+  ['Ремонт скола',3000,false,'Полимер под УФ-лампой, шлифовка',false,0,'Очистка повреждения, удаление влаги и воздуха, заполнение полимером, полимеризация под УФ-лампой, шлифовка. Трещины от 1 000 ₽.'],
+  ['Бронь зон риска',80000,false,'Капот, бампер, фары, зеркала, пороги, зоны ручек',true,1,'Защита самых уязвимых мест: капот, бампер, фары, зеркала, пороги, зоны ручек.'],
+  ['Бронирование фар',3000,false,'Защита от помутнения, сколов и выгорания',false,1,'Защита фар от помутнения, сколов и выгорания. Сохраняет прозрачность и продлевает срок службы оптики.'],
+  ['Бронь лобового стекла',25000,false,'Полиуретан от сколов и трещин',false,1,'Полиуретановая плёнка защищает от сколов, трещин и царапин от камней и песка, стекло остаётся прозрачным.'],
+  ['Бронь всего кузова',240000,false,'Полная защита ЛКП. Матовая плёнка +15%',false,1,'Полная защита лакокрасочного покрытия от сколов, царапин и реагентов. Самовосстанавливающаяся поверхность, заводское ЛКП сохраняется. Матовая плёнка +15% к стоимости.'],
+  ['Полировка и бронь фар',5000,true,'Полировка 2 000 ₽ + бронь 3 000 ₽',true,2,'Полировка возвращает прозрачность и яркий свет (2 000 ₽), затем фары закрываем полиуретаном от сколов и помутнения (3 000 ₽).'],
+  ['Полировка кузова',15000,false,'Убираем царапины и «паутинку», возвращаем блеск',false,2,'Удаляем царапины, «паутинку» и потёртости. Возвращаем глубину цвета и зеркальный блеск.'],
+  ['Полировка + керамика',24000,false,'Полировка 15 000 ₽ + керамика 9 000 ₽',true,2,'Полировка кузова (15 000 ₽) и защитное керамическое покрытие (9 000 ₽): гидрофобный эффект, защита от УФ и грязи, глубокий блеск.'],
+  ['Керамика кузова',9000,false,'Гидрофоб, защита от УФ и грязи, глубокий блеск',false,2,'Защитное покрытие: гидрофобный эффект, защита от УФ и грязи, глубокий блеск.'],
+  ['Полировка лобового',8000,false,'Убираем мелкие царапины, улучшаем обзор',false,2,'Убираем мелкие царапины и потёртости на лобовом, обзор становится лучше.'],
+  ['Химчистка салона',15000,false,'Сиденья, потолок, ковры, пластик, запахи',true,3,'Глубокая очистка сидений, потолка, ковров и пластика. Удаляем запахи и бактерии. Отдельные элементы от 500 ₽.'],
+  ['Керамика салона',10000,false,'Защита ткани и кожи от влаги и пятен',false,3,'Защита ткани и кожи от влаги, пятен и загрязнений.'],
+  ['Шумоизоляция',4500,false,'Арки с антикором от 4 500 ₽, салон от 5 000 ₽',false,3,'Премиальные материалы, бережная разборка и сборка салона. Арки с антикором от 4 500 ₽, салон от 5 000 ₽.'],
+  ['Антихром плёнкой',1500,false,'Хром в чёрный или в цвет кузова. Покраска от 2 500 ₽',false,3,'Оклеиваем хромированные элементы в чёрный или в цвет кузова. Покраска хрома от 2 500 ₽.'],
 ];
 const box=document.getElementById('svcs'),tot=document.getElementById('tot'),ask=document.getElementById('ask'),waBtn=document.getElementById('wa');
 const fmt=n=>n.toLocaleString('ru-RU').replace(/ |,/g,' ');
@@ -880,14 +941,30 @@ calc();
 /* Сразу показываем итог, без «0 ₽» до анимации */
 (()=>{const s=SVC.filter(x=>x[2]&&x[1]).reduce((a,x)=>a+x[1],0);shown=s;tot.textContent=(s?'от ':'')+fmt(s)+' ₽'})();
 /* Прайс строками и цены в карточках услуг — из того же списка SVC */
-/* Прайс: вкладки, в каждой 4 строки, остальное по «Ещё N» */
+/* Прайс: вкладки, карточки (как job-listing): по клику карточка раскрывается в окно с описанием и записью */
+const PICO=['<path d="M3 13l2-6h14l2 6v5H3z"/><path d="M6 9.5h12l1 3.5H5z" fill="currentColor" stroke="none"/>','<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/>','<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/>','<path d="M7 20v-6a5 5 0 0 1 10 0v6"/><path d="M5 20h14M9 9V6a3 3 0 0 1 6 0v3"/>'];
+const pico=t=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${PICO[t]}</svg>`;
 (()=>{const tabs=document.getElementById('ptabs'),list=document.getElementById('plist'),more=document.getElementById('pmoreBtn');let cur=0,open=false;
  tabs.innerHTML=PTABS.map((t,i)=>`<button type="button" class="${i?'':'on'}">${t}</button>`).join('');
  const draw=()=>{const rows=SVC.filter(x=>x[5]===cur),vis=open?rows:rows.slice(0,4);
-  list.innerHTML=vis.map((s,i)=>`<div class="row rin" style="--pd:${(i*.05).toFixed(2)}s"><div><b>${s[0]}</b><p>${s[3]}</p></div><div class="v"><small>от</small>${fmt(s[1])} ₽</div></div>`).join('');
+  list.innerHTML=vis.map((s,i)=>`<button type="button" class="pcard rin" style="--pd:${(i*.05).toFixed(2)}s" data-i="${SVC.indexOf(s)}"><i>${pico(s[5])}</i><span><b>${s[0]}</b><em>от ${fmt(s[1])} ₽</em><small>${s[3]}</small></span><u aria-hidden="true">+</u></button>`).join('');
   const n=rows.length-4;more.hidden=n<=0;more.textContent=open?'Свернуть ↑':'Ещё '+n+' ↓'};
  tabs.querySelectorAll('button').forEach((b,i)=>b.onclick=()=>{cur=i;open=false;tabs.querySelectorAll('button').forEach((x,j)=>x.classList.toggle('on',i===j));draw()});
- more.onclick=()=>{open=!open;draw()};draw()})();
+ more.onclick=()=>{open=!open;draw()};draw();
+ /* окно: вырастает из карточки (FLIP), фон затемняется */
+ const dlg=document.getElementById('pdlg'),card=dlg.querySelector('.pd-card'),red=matchMedia('(prefers-reduced-motion:reduce)').matches;let from=null;
+ const fit=()=>{const r=from.getBoundingClientRect(),f=card.getBoundingClientRect();return `translate(${r.left-f.left}px,${r.top-f.top}px) scale(${r.width/f.width},${r.height/f.height})`};
+ list.addEventListener('click',e=>{const c=e.target.closest('.pcard');if(!c)return;from=c;const s=SVC[+c.dataset.i];
+  card.querySelector('.pd-ic').innerHTML=pico(s[5]);card.querySelector('.pd-t').textContent=s[0];card.querySelector('.pd-g').textContent=PTABS[s[5]];
+  card.querySelector('.pd-p').innerHTML='<small>от</small> '+fmt(s[1])+' ₽';card.querySelector('.pd-d').textContent=s[6]||s[3];
+  const bb=card.querySelector('.pd-book');bb.dataset.msg=`Здравствуйте! Я с сайта. Хочу: ${s[0].toLowerCase()}, от ${fmt(s[1])} ₽. Моя машина: `;
+  dlg.hidden=false;document.documentElement.classList.add('lock');c.classList.add('ghost');
+  if(!red){card.style.transition='none';card.style.transform=fit();card.getBoundingClientRect();card.style.transition='';card.style.transform=''}
+  requestAnimationFrame(()=>dlg.classList.add('on'));setTimeout(()=>bb.focus({preventScroll:true}),350)});
+ const close=()=>{if(dlg.hidden)return;dlg.classList.remove('on');if(!red&&from&&document.body.contains(from))card.style.transform=fit();
+  setTimeout(()=>{dlg.hidden=true;card.style.transform='';from&&from.classList.remove('ghost');if(!document.getElementById('bk').classList.contains('on'))document.documentElement.classList.remove('lock');from&&from.focus({preventScroll:true})},red?0:420)};
+ dlg.addEventListener('click',e=>{if(e.target===dlg||e.target.closest('[data-pclose]'))close();if(e.target.closest('.pd-book'))setTimeout(close,50)});
+ addEventListener('keydown',e=>{if(e.key==='Escape')close()})})();
 document.querySelectorAll('[data-p]').forEach(el=>{const s=SVC.find(x=>x[0]===el.dataset.p);el.textContent=s&&s[1]?'от '+fmt(s[1])+' ₽':'цену назовём'});
 
 /* ===== TINT: примерка. [подпись, затемнение 0–1, что видно, что по закону, 1 = только задние] ===== */
@@ -938,11 +1015,14 @@ function sel(i){const t=T[i];[...tabs.querySelectorAll('button')].forEach((b,j)=
 sel(0)})();
 
 
-/* ===== РАБОТЫ: показываем по 3 ===== */
-(()=>{const items=[...document.querySelectorAll('#gal button')],btn=document.getElementById('galMore'),cnt=document.getElementById('galCnt'),w=document.getElementById('galw');let shown=3;
+/* ===== РАБОТЫ: сначала 3, «Показать все» открывает остальные, «Свернуть» прячет обратно ===== */
+(()=>{const items=[...document.querySelectorAll('#gal button')],btn=document.getElementById('galMore'),cnt=document.getElementById('galCnt'),w=document.getElementById('galw');let open=false;
  items.forEach((b,i)=>{if(i>=3){b.classList.add('hide');b.removeAttribute('data-rv')}});
- const upd=()=>{const left=items.length-shown;w.classList.toggle('more',left>0);btn.hidden=left<=0;btn.textContent='Показать ещё '+Math.min(3,left);cnt.textContent=Math.min(shown,items.length)+' из '+items.length+' фото'};
- btn.onclick=()=>{items.slice(shown,shown+3).forEach((b,i)=>{b.classList.remove('hide');b.classList.add('new');b.style.setProperty('--gd',(i*.08)+'s')});shown+=3;upd()};
+ const upd=()=>{w.classList.toggle('more',!open);btn.textContent=open?'Свернуть ↑':'Показать все '+items.length;cnt.textContent=open?items.length+' фото':'3 из '+items.length+' фото'};
+ btn.onclick=()=>{open=!open;
+  if(open)items.slice(3).forEach((b,i)=>{b.classList.remove('hide');b.classList.remove('new');void b.offsetWidth;b.classList.add('new');b.style.setProperty('--gd',(i*.05)+'s')});
+  else{items.slice(3).forEach(b=>b.classList.add('hide'));document.getElementById('works').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'})}
+  upd()};
  upd()})();
 
 /* ===== ОТЗЫВЫ: реальные с Яндекс Карт (5★). Раскладываем по колонкам, каждая колонка дублируется для бесконечной ленты ===== */
@@ -990,6 +1070,22 @@ gl_FragColor=vec4(col,1.);}`));
  if(document.documentElement.classList.contains('nointro'))return kill();
  it.addEventListener('click',()=>{it.style.animation='introOut .35s ease forwards'});it.addEventListener('animationend',e=>{if(e.target===it)kill()});setTimeout(kill,3200)})();
 
+
+/* ===== Фото услуг: плавное увеличение по клику (как zoomable-image) ===== */
+(()=>{const red=matchMedia('(prefers-reduced-motion:reduce)').matches;let st=null;
+ const close=()=>{if(!st)return;const {im,bg,cap,src}=st,r=src.getBoundingClientRect();st=null;bg.classList.remove('on');cap.classList.remove('on');
+  Object.assign(im.style,{left:r.left+'px',top:r.top+'px',width:r.width+'px',height:r.height+'px',borderRadius:'0px'});
+  setTimeout(()=>{im.remove();bg.remove();cap.remove();src.style.visibility=''},red?0:460);removeEventListener('scroll',close)};
+ document.querySelectorAll('.s-card .im').forEach(box=>box.addEventListener('click',()=>{const img=box.querySelector('img');if(st||!img.naturalWidth)return;
+  const r=box.getBoundingClientRect(),bg=document.createElement('div'),im=document.createElement('div'),cap=document.createElement('div');
+  bg.className='zm-bg';im.className='zm-im';cap.className='zm-cap';cap.textContent=img.alt+' · нажмите, чтобы закрыть';
+  im.style.backgroundImage=`url("${img.currentSrc||img.src}")`;Object.assign(im.style,{left:r.left+'px',top:r.top+'px',width:r.width+'px',height:r.height+'px',borderRadius:'0px'});
+  document.body.append(bg,im,cap);box.style.visibility='hidden';st={im,bg,cap,src:box};
+  const k=Math.min(innerWidth*.92/img.naturalWidth,innerHeight*.84/img.naturalHeight),w=img.naturalWidth*k,h=img.naturalHeight*k;
+  im.getBoundingClientRect();
+  requestAnimationFrame(()=>{bg.classList.add('on');cap.classList.add('on');Object.assign(im.style,{left:(innerWidth-w)/2+'px',top:(innerHeight-h)/2-10+'px',width:w+'px',height:h+'px',borderRadius:'20px'})});
+  bg.onclick=im.onclick=close;setTimeout(()=>addEventListener('scroll',close,{passive:true}),300)}));
+ addEventListener('keydown',e=>{if(e.key==='Escape')close()})})();
 /* Появление при скролле */
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{rootMargin:'0px 0px -8% 0px'});
 document.querySelectorAll('[data-rv]').forEach(el=>io.observe(el));
