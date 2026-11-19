@@ -400,6 +400,49 @@ html.lock{overflow:hidden}
   .tint .tctl .info .btn{justify-self:start}
 }
 @media (max-width:640px){.tint .carbox{max-width:none}}
+
+/* ===== HERO 2.0: фото справа растворяется в чёрном, текст слева (как макет Дениса 19.11) ===== */
+.hero{position:relative;min-height:calc(100svh - 76px);display:flex;align-items:center;padding:56px 0;overflow:hidden;isolation:isolate}
+.hero:before{display:none}
+.hero .wrap{display:block;position:static;width:100%}
+.htx{max-width:600px}
+.hero .hbg{position:absolute;top:0;right:0;bottom:0;width:62%;z-index:-1;pointer-events:none}
+.hero .hbg img{width:100%;height:100%;object-fit:cover;object-position:0% 55%;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.35) 9%,#000 26%),linear-gradient(0deg,transparent 0,#000 14%);-webkit-mask-composite:source-in;
+  mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.35) 9%,#000 26%),linear-gradient(0deg,transparent 0,#000 14%);mask-composite:intersect}
+.eyb{display:flex;align-items:center;gap:18px;font:600 13px var(--b);letter-spacing:.32em;text-transform:uppercase;color:#a9abae}
+.eyb:before{content:"";width:40px;height:3px;border-radius:2px;background:var(--acc)}
+.hero h1{font-size:clamp(46px,5.6vw,86px);margin:22px 0 22px}
+.hero h1 em{display:block}
+.hero .lead{font-size:20px;line-height:1.55;color:#c9cacd;max-width:500px}
+.hero .cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:36px}
+.btn.big{padding:19px 30px;font-size:16.5px}
+.btn.big svg{width:20px;height:20px}
+.hmeta{display:flex;flex-wrap:wrap;align-items:center;gap:12px 22px;margin-top:28px;color:var(--dim);font:500 14px var(--b)}
+.hmeta .open:before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:#4ade80;margin-right:9px;vertical-align:1px}
+/* Расчёт сразу под первым экраном */
+.qcs{padding:90px 0}
+.qcw{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,560px);gap:56px;align-items:center}
+.qcw .qc{margin-top:0;max-width:none;scroll-margin-top:100px}
+.hmeta .open.cl:before{background:#9ea3a9}
+@media (max-width:1100px){.hero .hbg{width:58%}.htx{max-width:540px}}
+@media (max-width:900px){
+  .hero{min-height:0;padding:28px 0 36px;display:block}
+  .htx{max-width:none}
+  .hero .hbg{position:relative;width:auto;margin:6px calc(-1*var(--pad)) 0;aspect-ratio:1.12;z-index:0}
+  .hero .hbg img{object-position:30% 50%;
+    -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 14%,#000 84%,transparent 100%);mask-image:linear-gradient(180deg,transparent 0,#000 14%,#000 84%,transparent 100%);-webkit-mask-composite:source-over;mask-composite:add}
+  .hero .cta{margin-top:4px}
+  .qcs{padding:56px 0}
+  .qcw{grid-template-columns:1fr;gap:24px}
+}
+@media (max-width:640px){
+  .eyb{font-size:11.5px;letter-spacing:.24em;gap:12px}.eyb:before{width:28px}
+  .hero h1{font-size:clamp(40px,11.5vw,52px);margin:16px 0 14px}
+  .hero .lead{font-size:16.5px}
+  .hero .cta{flex-direction:column}.hero .cta .btn{width:100%}
+  .hmeta{margin-top:20px;gap:10px 16px;font-size:13px}
+}
 </style>
 </head>
 <body>
@@ -412,14 +455,24 @@ html.lock{overflow:hidden}
 </header>
 
 <main id="top">
-<!-- ===== HERO ===== -->
+<!-- ===== HERO: фото на весь фон справа (img/hero.jpg), текст слева. Номер и табличка на фото заменены на BRUTUSI ===== -->
 <section class="hero">
   <div class="wrap">
-    <div>
-      <a class="pill" href="https://yandex.ru/maps/org/deteyling_brutusi/107285788898/reviews/" target="_blank" rel="noopener"><span class="st">★&nbsp;5,0</span><span>72 оценки на Яндекс Картах<span class="hm"> · Нахабино</span></span></a>
+    <div class="htx">
+      <div class="eyb">Детейлинг в Нахабино</div>
       <h1>Тонировка и броня <em>за один день</em></h1>
-      <p class="lead">Атермалка, задняя полусфера, бронеплёнка на зоны риска и фары, полировка с керамикой. Утром поставили — вечером забрали. Посчитайте цену прямо здесь.</p>
+      <p class="lead">Атермалка, задняя полусфера, бронеплёнка на зоны риска и фары, полировка с керамикой. Утром поставили, вечером забрали.</p>
+      <div class="hbg"><img src="img/hero.jpg" alt="Lamborghini Urus в боксе Brutusi Detailing" width="972" height="846" fetchpriority="high"></div>
+      <div class="cta"><a class="btn acc big" href="#book" data-book><span>Записаться на услугу</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a class="btn gh big" href="#calc">Рассчитать цену</a></div>
+      <div class="hmeta"><a class="pill" href="https://yandex.ru/maps/org/deteyling_brutusi/107285788898/reviews/" target="_blank" rel="noopener"><span class="st">★&nbsp;5,0</span><span>72 оценки на Яндекс Картах</span></a><span class="open" id="open">Ежедневно 9–23</span></div>
+    </div>
+  </div>
+</section>
 
+<!-- ===== РАСЧЁТ: калькулятор (цены в скрипте, блок PRICE) ===== -->
+<section class="qcs">
+  <div class="wrap qcw">
+    <div class="head1"><div class="num">Расчёт за 30 секунд</div><h2>Цена для <em>вашей машины</em></h2><p class="sub">Выберите кузов и услуги, сумма посчитается сразу. Точную цену назовём до начала работ.</p></div>
       <!-- Калькулятор: кузов + услуги. Цены и коэффициенты — в скрипте, блок PRICE -->
       <div class="qc" id="calc">
         <div class="top"><b>Цена для вашей машины — за 30 секунд</b><small>примерный расчёт</small></div>
@@ -431,15 +484,6 @@ html.lock{overflow:hidden}
         </div>
         <div class="ask" id="ask"></div>
       </div>
-      <div class="trust"><span id="open">Ежедневно 9–23</span><span>Клиентская зона с кофе</span><span>Работаем с юрлицами</span></div>
-    </div>
-
-    <div class="vis" data-rv="zoom">
-      <div class="ph"><img src="img/p01.jpg" alt="Lamborghini Urus в боксе Brutusi" fetchpriority="high"></div>
-      <div class="tag"><i></i>Работа студии</div>
-      <div class="thumbs"><button data-g="1" aria-label="Открыть фото"><img src="img/p02.jpg" alt="BMW X5 в боксе"></button><button data-g="8" aria-label="Открыть фото"><img src="img/p09.jpg" alt="Chevrolet Camaro в боксе"></button></div>
-      <div class="quote"><div class="s">★★★★★</div><p>«Заранее записались, утром машину поставил, вечером забрал. Сделали атермалку на перед и бронь на зоны риска»</p><small>Дина Е. · отзыв на Яндекс Картах</small></div>
-    </div>
   </div>
 </section>
 
@@ -815,7 +859,7 @@ addEventListener('keydown',e=>{if(!lbx.classList.contains('on'))return;if(e.key=
 
 /* «Открыто / закрыто» по московскому времени. График: ежедневно 9–23 */
 (()=>{const n=new Date(new Date().toLocaleString('en-US',{timeZone:'Europe/Moscow'})),h=n.getHours();
- document.getElementById('open').textContent=(h>=9&&h<23)?'Сейчас открыто до 23:00':'Сейчас закрыто · пишите, ответим утром';})();
+ const op=document.getElementById('open'),on=h>=9&&h<23;op.textContent=on?'Сейчас открыто до 23:00':'Сейчас закрыто · пишите, ответим утром';op.classList.toggle('cl',!on);})();
 
 /* Живая карта Яндекса подгружается только по кнопке */
 const map=document.getElementById('map');
