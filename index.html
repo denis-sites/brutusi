@@ -572,6 +572,47 @@ html.lock{overflow:hidden}
 .zm-im{position:fixed;z-index:291;background:#111 center/cover no-repeat;border-radius:24px;cursor:zoom-out;transition:left .45s var(--ease),top .45s var(--ease),width .45s var(--ease),height .45s var(--ease),border-radius .45s var(--ease)}
 .zm-cap{position:fixed;left:0;right:0;bottom:22px;z-index:292;text-align:center;color:#dcdcd8;font:600 14px var(--b);opacity:0;transition:opacity .3s ease .2s;pointer-events:none}
 .zm-cap.on{opacity:1}
+
+/* ===== УСЛУГИ: анимированные вкладки (как animated-tabs): подложка переезжает, контент проявляется из размытия ===== */
+.stabs{max-width:1120px;margin:0 auto}
+.st-bar{position:relative;display:flex;gap:4px;padding:6px;border:1px solid var(--line);border-radius:999px;background:rgba(23,21,15,.85);width:max-content;max-width:100%;margin:0 auto 14px;overflow-x:auto;scrollbar-width:none}
+.st-bar::-webkit-scrollbar{display:none}
+.st-bar button{position:relative;z-index:1;flex-shrink:0;border:0;background:none;color:#bfc1c4;font:600 15px var(--b);padding:11px 20px;border-radius:999px;cursor:pointer;transition:color .3s}
+.st-bar button:hover{color:var(--ink)}
+.st-bar button.on{color:var(--accInk)}
+.st-pill{position:absolute;z-index:0;top:6px;bottom:6px;left:0;width:0;border-radius:999px;background:var(--acc);box-shadow:0 8px 24px -10px var(--acc);transition:transform .5s cubic-bezier(.3,1.3,.5,1),width .5s cubic-bezier(.3,1.3,.5,1)}
+.st-panel{border:1px solid var(--line);border-radius:30px;background:rgba(23,21,15,.88);padding:16px;box-shadow:0 30px 80px -40px #000}
+.stp{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:30px;align-items:center}
+.stp[hidden]{display:none}
+.stp .im{position:relative;aspect-ratio:4/3;border-radius:22px;overflow:hidden;background:#15171a;cursor:zoom-in}
+.stp .im img{width:100%;height:100%;object-fit:cover;object-position:50% 55%}
+.stp .im:after{content:"";position:absolute;right:12px;bottom:12px;width:36px;height:36px;border-radius:50%;background:rgba(10,10,12,.72) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7'/%3E%3C/svg%3E") center/16px no-repeat;opacity:.85}
+.stp .svc-tag{position:absolute;top:14px;left:14px;z-index:1}
+.stp .bd{padding:10px 18px 10px 0}
+.stp .k{font:600 12px var(--b);letter-spacing:.18em;color:var(--dim)}
+.stp h3{font:900 clamp(28px,3vw,40px)/1.05 var(--d);text-transform:uppercase;margin:10px 0 12px}
+.stp p{color:#cfd0d3;font-size:16.5px}
+.stp ul{list-style:none;margin:18px 0 0;display:grid;gap:9px}
+.stp li{position:relative;padding-left:28px;color:#e2e3e5;font-size:15.5px}
+.stp li:before{content:"";position:absolute;left:0;top:.38em;width:16px;height:16px;border-radius:50%;background:var(--accSoft) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffc21a' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12.5l4 4 8-9'/%3E%3C/svg%3E") center/11px no-repeat}
+.stp .pr{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;margin-top:24px;padding-top:20px;border-top:1px dashed var(--line)}
+.stp .pv{font:900 26px var(--d)}
+.stp .pb{display:flex;gap:8px;flex-wrap:wrap}
+.stp .pb .btn{padding:13px 20px;font-size:14.5px}
+/* смена вкладки: картинка и текст проявляются из размытия и сдвига */
+.stp.in .im{animation:stIm .6s var(--ease) both}
+.stp.in .bd>*{animation:stTx .55s var(--ease) both}
+.stp.in .bd>*:nth-child(2){animation-delay:.04s}.stp.in .bd>*:nth-child(3){animation-delay:.08s}.stp.in .bd>*:nth-child(4){animation-delay:.12s}.stp.in .bd>*:nth-child(5){animation-delay:.16s}
+@keyframes stIm{from{opacity:0;filter:blur(10px);transform:scale(1.04)}}
+@keyframes stTx{from{opacity:0;filter:blur(6px);transform:translate3d(0,10px,0)}}
+@media (max-width:860px){.stp{grid-template-columns:1fr;gap:18px}.stp .bd{padding:0 6px 6px}}
+@media (max-width:640px){
+  .st-bar{width:auto;margin:0 calc(-1*var(--pad)) 12px;border-radius:0;border-inline:0;padding:6px var(--pad)}
+  .st-bar button{padding:10px 15px;font-size:14px}
+  .st-panel{padding:10px;border-radius:24px}
+  .stp .im{border-radius:16px}
+  .stp .pr{flex-direction:column;align-items:stretch}.stp .pb .btn{flex:1}
+}
 </style>
 </head>
 <body>
@@ -654,26 +695,39 @@ html.lock{overflow:hidden}
       <div><div class="num">02 · Услуги</div><h2>Что делаем <em>с машиной</em></h2></div>
       <p class="sub">Стёкла, кузов, фары и салон. Заранее подскажем, какая плёнка подойдёт, и назовём цену до начала работ.</p>
     </div>
-    <div class="svc">
-      <article class="s-card" data-rv><div class="im"><span class="svc-tag">Хит</span><img decoding="async" src="img/p05.jpg" alt="Kia с тонировкой задней полусферы" loading="lazy"></div><div class="bd">
-        <h3>Тонировка</h3><p>Задняя полусфера, атермалка на перед и лобовое, тонировка фонарей, полоса на лобовое. Делаем за несколько часов.</p>
-        <div class="pr"><span data-p="Тонировка стёкол"></span><a href="#tint">Подобрать →</a></div></div></article>
-      <article class="s-card" data-rv style="--dl:.08s"><div class="im"><img decoding="async" src="img/p02.jpg" alt="BMW X5 после оклейки" loading="lazy"></div><div class="bd">
-        <h3>Бронеплёнка</h3><p>Полиуретан на зоны риска или весь кузов: капот, бампер, пороги, зона погрузки. Защита от сколов и реагентов.</p>
-        <div class="pr"><span data-p="Бронь зон риска"></span><a href="#calc">Рассчитать →</a></div></div></article>
-      <article class="s-card" data-rv style="--dl:.16s"><div class="im"><img decoding="async" src="img/p06.jpg" alt="Kia после полировки и брони фар" loading="lazy"></div><div class="bd">
-        <h3>Фары: полировка и бронь</h3><p>Убираем желтизну и мутность, затем закрываем фары прозрачным полиуретаном — свет снова яркий.</p>
-        <div class="pr"><span data-p="Полировка и бронь фар"></span><a href="#calc">Рассчитать →</a></div></div></article>
-      <article class="s-card" data-rv><div class="im"><img decoding="async" src="img/p03.jpg" alt="BMW после полировки" loading="lazy"></div><div class="bd">
-        <h3>Полировка + керамика</h3><p>Убираем «паутинку» и мелкие царапины, возвращаем глубину цвета и закрываем кузов керамикой.</p>
-        <div class="pr"><span data-p="Полировка + керамика"></span><a href="#calc">Рассчитать →</a></div></div></article>
-      <article class="s-card" data-rv style="--dl:.08s"><div class="im"><img decoding="async" src="img/p07.jpg" alt="Пикап с чёрными элементами" loading="lazy"></div><div class="bd">
-        <h3>Антихром и чёрный глянец</h3><p>Оклеиваем хром в чёрный, крышу — в чёрный полиуретан. Машина выглядит дороже и строже.</p>
-        <div class="pr"><span data-p="Антихром плёнкой"></span><a href="#calc">Рассчитать →</a></div></div></article>
-      <article class="s-card" data-rv style="--dl:.16s"><div class="im"><img decoding="async" src="img/p12.jpg" alt="Микроавтобус после тонировки" loading="lazy"></div><div class="bd">
-        <h3>Салон и шумоизоляция</h3><p>Химчистка салона, шумоизоляция дверей и арок, антидождь. Для микроавтобусов и автопарков — договор и безнал.</p>
-        <div class="pr"><span data-p="Химчистка салона"></span><a href="#contacts">Узнать →</a></div></div></article>
-    </div>
+    <div class="stabs" data-rv><div class="st-bar" role="tablist" aria-label="Услуги"><button type="button" role="tab" aria-selected="true" class="on">Тонировка</button><button type="button" role="tab" aria-selected="false" class="">Бронеплёнка</button><button type="button" role="tab" aria-selected="false" class="">Фары</button><button type="button" role="tab" aria-selected="false" class="">Полировка и керамика</button><button type="button" role="tab" aria-selected="false" class="">Антихром</button><button type="button" role="tab" aria-selected="false" class="">Салон и шумоизоляция</button><span class="st-pill" aria-hidden="true"></span></div>
+    <div class="st-panel">
+      <article class="stp on" role="tabpanel">
+        <div class="im"><span class="svc-tag">Хит</span><img decoding="async" src="img/p05.jpg" alt="Kia с тонировкой задней полусферы" loading="lazy"></div>
+        <div class="bd"><small class="k">01 / 06</small><h3>Тонировка</h3><p>Задняя полусфера, атермалка на перед и лобовое, тонировка фонарей и полоса на лобовое. Делаем за несколько часов.</p><ul><li>Задняя полусфера, любой процент</li><li>Атермалка на передние и лобовое по ГОСТу</li><li>Тонировка фар и фонарей</li><li>Полоса на лобовое стекло</li></ul>
+          <div class="pr"><span class="pv" data-p="Тонировка стёкол"></span><div class="pb"><a class="btn acc" href="#book" data-book data-msg="Здравствуйте! Я с сайта. Интересует: тонировка. Моя машина: ">Записаться</a><a class="btn gh" href="#tint">Подобрать процент</a></div></div></div>
+      </article>
+      <article class="stp" role="tabpanel" hidden>
+        <div class="im"><img decoding="async" src="img/p02.jpg" alt="BMW X5 после оклейки бронеплёнкой" loading="lazy"></div>
+        <div class="bd"><small class="k">02 / 06</small><h3>Бронеплёнка</h3><p>Полиуретан на зоны риска или весь кузов. Защищает от сколов, царапин и реагентов, заводское ЛКП остаётся целым.</p><ul><li>Зоны риска: капот, бампер, фары, зеркала, пороги</li><li>Весь кузов, глянец или мат</li><li>Зона погрузки багажника и ручки</li><li>Бронь лобового стекла</li></ul>
+          <div class="pr"><span class="pv" data-p="Бронь зон риска"></span><div class="pb"><a class="btn acc" href="#book" data-book data-msg="Здравствуйте! Я с сайта. Интересует: бронеплёнка. Моя машина: ">Записаться</a><a class="btn gh" href="#prices">Все цены на бронь</a></div></div></div>
+      </article>
+      <article class="stp" role="tabpanel" hidden>
+        <div class="im"><img decoding="async" src="img/p06.jpg" alt="Kia после полировки и брони фар" loading="lazy"></div>
+        <div class="bd"><small class="k">03 / 06</small><h3>Фары</h3><p>Убираем желтизну и мутность, затем закрываем фары прозрачным полиуретаном. Свет снова яркий, оптика защищена от сколов.</p><ul><li>Полировка фар от 2 000 ₽</li><li>Бронь фар от 3 000 ₽</li><li>Тонировка фар от 3 000 ₽</li></ul>
+          <div class="pr"><span class="pv" data-p="Полировка и бронь фар"></span><div class="pb"><a class="btn acc" href="#book" data-book data-msg="Здравствуйте! Я с сайта. Интересует: фары. Моя машина: ">Записаться</a><a class="btn gh" href="#calc">Рассчитать</a></div></div></div>
+      </article>
+      <article class="stp" role="tabpanel" hidden>
+        <div class="im"><img decoding="async" src="img/p03.jpg" alt="BMW после полировки" loading="lazy"></div>
+        <div class="bd"><small class="k">04 / 06</small><h3>Полировка и керамика</h3><p>Убираем «паутинку» и мелкие царапины, возвращаем глубину цвета и закрываем кузов керамикой.</p><ul><li>Полировка кузова от 15 000 ₽</li><li>Керамика кузова, салона и дисков</li><li>Полировка лобового стекла</li></ul>
+          <div class="pr"><span class="pv" data-p="Полировка + керамика"></span><div class="pb"><a class="btn acc" href="#book" data-book data-msg="Здравствуйте! Я с сайта. Интересует: полировка и керамика. Моя машина: ">Записаться</a><a class="btn gh" href="#calc">Рассчитать</a></div></div></div>
+      </article>
+      <article class="stp" role="tabpanel" hidden>
+        <div class="im"><img decoding="async" src="img/p07.jpg" alt="Пикап с чёрными элементами" loading="lazy"></div>
+        <div class="bd"><small class="k">05 / 06</small><h3>Антихром</h3><p>Оклеиваем хром в чёрный, крышу в чёрный полиуретан. Машина выглядит дороже и строже.</p><ul><li>Хром в чёрный или в цвет кузова плёнкой</li><li>Покраска хрома от 2 500 ₽</li><li>Крыша в чёрный глянцевый полиуретан</li></ul>
+          <div class="pr"><span class="pv" data-p="Антихром плёнкой"></span><div class="pb"><a class="btn acc" href="#book" data-book data-msg="Здравствуйте! Я с сайта. Интересует: антихром. Моя машина: ">Записаться</a><a class="btn gh" href="#prices">Все цены</a></div></div></div>
+      </article>
+      <article class="stp" role="tabpanel" hidden>
+        <div class="im"><img decoding="async" src="img/p12.jpg" alt="Микроавтобус после тонировки" loading="lazy"></div>
+        <div class="bd"><small class="k">06 / 06</small><h3>Салон и шумоизоляция</h3><p>Химчистка салона, шумоизоляция дверей и арок, антидождь. Для микроавтобусов и автопарков: договор и безнал.</p><ul><li>Химчистка салона и отдельных элементов</li><li>Шумоизоляция дверей и арок с антикором</li><li>Антидождь на стёкла</li><li>Работаем с юрлицами</li></ul>
+          <div class="pr"><span class="pv" data-p="Химчистка салона"></span><div class="pb"><a class="btn acc" href="#book" data-book data-msg="Здравствуйте! Я с сайта. Интересует: салон и шумоизоляция. Моя машина: ">Записаться</a><a class="btn gh" href="#prices">Все цены</a></div></div></div>
+      </article>
+    </div></div>
   </div>
 </section>
 
@@ -1071,12 +1125,22 @@ gl_FragColor=vec4(col,1.);}`));
  it.addEventListener('click',()=>{it.style.animation='introOut .35s ease forwards'});it.addEventListener('animationend',e=>{if(e.target===it)kill()});setTimeout(kill,3200)})();
 
 
+
+/* ===== УСЛУГИ: вкладки ===== */
+(()=>{const bar=document.querySelector('.st-bar');if(!bar)return;const btns=[...bar.querySelectorAll('button')],pill=bar.querySelector('.st-pill'),pans=[...document.querySelectorAll('.stp')];let cur=0;
+ const place=()=>{const b=btns[cur];pill.style.width=b.offsetWidth+'px';pill.style.transform=`translateX(${b.offsetLeft}px)`};
+ const go=i=>{if(i===cur)return;pans[cur].hidden=true;pans[cur].classList.remove('on','in');btns[cur].classList.remove('on');btns[cur].setAttribute('aria-selected','false');cur=i;
+  const p=pans[i];p.hidden=false;p.classList.add('on');void p.offsetWidth;p.classList.add('in');btns[i].classList.add('on');btns[i].setAttribute('aria-selected','true');place();
+  const b=btns[i];if(bar.scrollWidth>bar.clientWidth)bar.scrollTo({left:b.offsetLeft-(bar.clientWidth-b.offsetWidth)/2,behavior:'smooth'})};
+ btns.forEach((b,i)=>b.onclick=()=>go(i));
+ bar.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){const n=(cur+(e.key==='ArrowRight'?1:-1)+btns.length)%btns.length;go(n);btns[n].focus()}});
+ place();addEventListener('resize',place);document.fonts&&document.fonts.ready.then(place)})();
 /* ===== Фото услуг: плавное увеличение по клику (как zoomable-image) ===== */
 (()=>{const red=matchMedia('(prefers-reduced-motion:reduce)').matches;let st=null;
  const close=()=>{if(!st)return;const {im,bg,cap,src}=st,r=src.getBoundingClientRect();st=null;bg.classList.remove('on');cap.classList.remove('on');
   Object.assign(im.style,{left:r.left+'px',top:r.top+'px',width:r.width+'px',height:r.height+'px',borderRadius:'0px'});
   setTimeout(()=>{im.remove();bg.remove();cap.remove();src.style.visibility=''},red?0:460);removeEventListener('scroll',close)};
- document.querySelectorAll('.s-card .im').forEach(box=>box.addEventListener('click',()=>{const img=box.querySelector('img');if(st||!img.naturalWidth)return;
+ document.querySelectorAll('.s-card .im,.stp .im').forEach(box=>box.addEventListener('click',()=>{const img=box.querySelector('img');if(st||!img.naturalWidth)return;
   const r=box.getBoundingClientRect(),bg=document.createElement('div'),im=document.createElement('div'),cap=document.createElement('div');
   bg.className='zm-bg';im.className='zm-im';cap.className='zm-cap';cap.textContent=img.alt+' · нажмите, чтобы закрыть';
   im.style.backgroundImage=`url("${img.currentSrc||img.src}")`;Object.assign(im.style,{left:r.left+'px',top:r.top+'px',width:r.width+'px',height:r.height+'px',borderRadius:'0px'});
